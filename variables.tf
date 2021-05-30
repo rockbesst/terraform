@@ -14,7 +14,7 @@ variable "ssh_key" {
 
 variable "allow_public_ip" {
   type = bool
-  default = true
+  default = false
 }
 
 variable "instance_type" {
