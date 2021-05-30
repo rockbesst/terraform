@@ -1,36 +1,7 @@
 provider "aws" {
 	region = var.region
 }
-# Instances#############################################
-resource "aws_instance" "WebServer1" {
-	ami = data.aws_ami.amazon_linux.id
-	instance_type = var.instance_type
-	availability_zone = "eu-central-1a"
-	vpc_security_group_ids = [data.aws_security_group.mainSecGroup.id]
-	user_data = file("ready_webserver.sh")
-	key_name = var.ssh_key
-	associate_public_ip_address = var.allow_public_ip
-	tags = merge(var.tags, {Name = "WebServer1"})
-}
-resource "aws_instance" "WebServer2" {
-	ami = data.aws_ami.amazon_linux.id
-	instance_type = var.instance_type
-	availability_zone = "eu-central-1b"
-	vpc_security_group_ids = [data.aws_security_group.mainSecGroup.id]
-	user_data = file("ready_webserver.sh")
-	key_name = var.ssh_key
-	associate_public_ip_address = var.allow_public_ip
-	tags = merge(var.tags, {Name = "WebServer2"})
-}
-# AMI Search
-data "aws_ami" "amazon_linux" {
-	owners = ["amazon"]
-	most_recent = true
-	filter {
-		name = "name"
-		values = ["amzn2-ami-hvm-*-x86_64-gp2"]
-	}
-}
+
 # Security Groups#########################################
 data "aws_security_group" "mainSecGroup" {
  id = "sg-0ef96a12de408930c"
@@ -79,3 +50,48 @@ resource "aws_lb" "MainLoadBalancer" {
  data "aws_subnet" "sub2"{
 	 id = "subnet-ad3c88d1"
  }
+
+ # IAM ###################################################
+
+ resource "aws_iam_instance_profile" "ec2_profile" {
+  name = "ec2_profile"
+  role = aws_iam_role.ec2_role.name
+}
+
+resource "aws_iam_role" "ec2_role" {
+  name = "ec2_role"
+  path = "/"
+
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "sts:AssumeRole",
+            "Principal": {
+               "Service": "ec2.amazonaws.com"
+            },
+            "Effect": "Allow",
+            "Sid": ""
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "ec2_policy" {
+  name = "ec2_policy"
+  role = aws_iam_role.ec2_role.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        "Effect" : "Allow"
+		Action = [
+          "s3:*",
+        ]
+        "Resource" = ["arn:aws:s3:::rockbesst-img", "arn:aws:s3:::rockbesst-img/*"]
+      },
+    ]
+  })
+}
