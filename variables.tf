@@ -20,5 +20,3 @@ variable "allow_public_ip" {
 variable "instance_type" {
   default = "t2.micro"
 }
-//test comment for git
-//test 2
