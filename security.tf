@@ -38,9 +38,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
     Statement = [
       {
         "Effect" : "Allow"
-		Action = [
-          "s3:*",
-        ]
+		    "Action" = "s3:*"
         "Resource" = ["arn:aws:s3:::rockbesst-img", "arn:aws:s3:::rockbesst-img/*"]
       },
     ]
