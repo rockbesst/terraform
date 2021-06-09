@@ -47,7 +47,20 @@ resource "aws_lb" "MainLoadBalancer" {
 	 id = "subnet-ad3c88d1"
  }
 
- data "aws_s3_bucket" "rockbesst-img"{
-	 bucket = "rockbesst-img"
-	 #arn = "arn:aws:s3:::rockbesst-img"
- }
+ resource "aws_s3_bucket" "rockbesst-test"{
+	 bucket = "rockbesst-test"
+	 acl = "private"
+}
+
+resource "aws_s3_bucket_object" "photo" {
+    bucket = aws_s3_bucket.rockbesst-test.id
+    acl    = "private"
+    key    = "IMG_3993.jpg"
+    source = "./files/IMG_3993.jpg"
+}
+resource "aws_s3_bucket_object" "index" {
+    bucket = aws_s3_bucket.rockbesst-test.id
+    acl    = "private"
+    key    = "index.html"
+    source = "./files/index.html"
+}

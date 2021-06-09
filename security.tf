@@ -44,11 +44,11 @@ data "aws_iam_policy_document" "for_rol" {
 resource "aws_iam_policy_attachment" "test-attach" {
   name       = "test-attachment"
   roles      =  ["${aws_iam_role.ec2_role.name}"]
-  policy_arn = aws_iam_policy.ec2_policy.arn
+  policy_arn = aws_iam_role_policy.ec2_policy.arn
 }
 
 resource "aws_s3_bucket_policy" "buc_policy" {
-  bucket = aws_s3_bucket.rockbesst-img.id
+  bucket = aws_s3_bucket.rockbesst-test.id
   policy = data.aws_iam_policy_document.for_buc.json
 }
 
@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "for_buc" {
     }
     actions = [ "s3:GetObject"]
     resources = [
-      "${aws_s3_bucket.rockbesst-img.arn}/*"
+      "${aws_s3_bucket.rockbesst-test.arn}/*"
     ]
   }
 
