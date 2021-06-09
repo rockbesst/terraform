@@ -49,5 +49,5 @@ resource "aws_lb" "MainLoadBalancer" {
 
  data "aws_s3_bucket" "rockbesst-img"{
 	 bucket = "rockbesst-img"
-	 arn = "arn:aws:s3:::rockbesst-img"
+	 #arn = "arn:aws:s3:::rockbesst-img"
  }
