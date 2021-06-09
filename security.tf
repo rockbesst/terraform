@@ -41,12 +41,6 @@ data "aws_iam_policy_document" "for_rol" {
   }
 }
 
-resource "aws_iam_policy_attachment" "test-attach" {
-  name       = "test-attachment"
-  roles      =  ["${aws_iam_role.ec2_role.name}"]
-  policy_arn = aws_iam_role_policy.ec2_policy.arn
-}
-
 resource "aws_s3_bucket_policy" "buc_policy" {
   bucket = aws_s3_bucket.rockbesst-test.id
   policy = data.aws_iam_policy_document.for_buc.json
