@@ -46,3 +46,8 @@ resource "aws_lb" "MainLoadBalancer" {
  data "aws_subnet" "sub2"{
 	 id = "subnet-ad3c88d1"
  }
+
+ data "aws_S3_bucket" "rockbesst-img"{
+	 bucket = "rockbesst-img"
+	 arn = "arn:aws:s3:::rockbesst-img"
+ }

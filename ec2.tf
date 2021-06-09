@@ -8,7 +8,7 @@ resource "aws_instance" "WebServer1" {
 	key_name = var.ssh_key
 	associate_public_ip_address = var.allow_public_ip
 	tags = merge(var.tags, {Name = "WebServer1"})
-     iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
+    iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 }
 resource "aws_instance" "WebServer2" {
 	ami = data.aws_ami.amazon_linux.id
